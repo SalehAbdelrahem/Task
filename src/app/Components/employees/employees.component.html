@@ -1,0 +1,248 @@
+<div class="table-responsive">
+  <div class="text-center my-2">
+    <a class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#exampleModal"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+    (click)="AddEmployee()"
+    >Add Employee</a>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr class="bg-dark text-white">
+        <th scope="col">Index</th>
+        <th scope="col">Employee Name</th>
+        <th scope="col">Employee code</th>
+        <th scope="col">Employee Date Of Birth</th>
+        <th scope="col">Employee joinDate</th>
+        <th scope="col">Employee salary</th>
+        <th>Options</th>
+        <!-- <th scope="col">department Name</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="" *ngFor="let emp of EmpList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.code }}</td>
+        <td>
+          {{ emp.dateOfBirth | date : "dd/MM/yyyy " }}
+          <div>{{ emp.dateOfBirth | date : "hh:mm a " }}</div>
+        </td>
+        <td>
+          {{ emp.joinDate | date : "dd/MM/yyyy " }}
+          <div>{{ emp.joinDate | date : "hh:mm a " }}</div>
+        </td>
+        <!-- <td>{{emp.dateOfBirth | date}}</td>
+        <td>{{emp.joinDate | date}}</td> -->
+        <td>{{ emp.salary }}</td>
+        <td>
+          <a
+            class="btn btn-outline-warning"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="EditEmployee(emp)"
+            >Edit</a
+          >|
+          <a
+            class="btn btn-outline-primary"
+            data-toggle="modal"
+            data-target="#ShowDetails"
+            data-bs-toggle="modal"
+            data-bs-target="#ShowDetails"
+            (click)="getEmployeeWithHisDept(emp.id)"
+            >Details</a
+          >|
+          <a class="btn btn-outline-danger" (click)="DeleteEmployee(emp.id)"
+            >Delete</a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- /////// -->
+
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form class="row g-3" [formGroup]="EmployeeForm">
+          <!-- Name -->
+          <div class="col-md-6">
+            <label for="name" class="form-label"> Employee Name </label>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              id="name"
+            />
+          </div>
+          <!-- code -->
+          <div class="col-md-6">
+            <label for="code" class="form-label"> Employee code </label>
+            <input
+              type="text"
+              formControlName="code"
+              class="form-control"
+              id="code"
+            />
+          </div>
+          <!-- salary -->
+          <div class="col-md-6">
+            <label for="salary" class="form-label"> Employee salary </label>
+            <input
+              type="text"
+              formControlName="salary"
+              class="form-control"
+              id="salary"
+            />
+          </div>
+          <!-- dateOfBirth -->
+          <div class="col-md-6">
+            <label for="dateOfBirth" class="form-label">
+              Employee dateOfBirth
+            </label>
+            <input
+              type="datetime-local"
+              formControlName="dateOfBirth"
+              class="form-control"
+              id="dateOfBirth"
+            />
+          </div>
+          <!-- joinDate -->
+          <div class="col-md-6">
+            <label for="joinDate" class="form-label"> Employee joinDate </label>
+            <input
+              type="datetime-local"
+              formControlName="joinDate"
+              class="form-control"
+              id="joinDate"
+
+            />
+          </div>
+
+           <!-- Department Options -->
+           <div class="col-md-6">
+            <label for="DeptOptions" class="form-label"> Department Options </label>
+           <select  formControlName="departmentId" class="form-control" [ngModel]="EmployeeModel.departmentId">
+            <option value="0" selected disabled>Select Department</option>
+            <option *ngFor="let dept of DeptList"  [value]="dept.id">{{dept.name}}</option>
+           </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="UpdateEmployee()"
+          *ngIf="showupdate"
+        >
+          Update
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="AddEmployee()"
+          *ngIf="!showupdate"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /// -->
+<!--
+  Show Details of Employee With his Dept
+ -->
+<div
+  class="modal fade"
+  id="ShowDetails"
+  tabindex="-1"
+  aria-labelledby="ShowDetailsLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ShowDetailsLabel">Modal Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <dl class="row">
+          <dt class="col-sm-2">Employee Name</dt>
+          <dd class="col-sm-10">
+            &nbsp; &nbsp; &nbsp; ({{ EmpWithDept?.name }})
+          </dd>
+          <hr>
+          <dt class="col-sm-2">Employee Code</dt>
+          <dd class="col-sm-10">
+            &nbsp; &nbsp; &nbsp; ({{ EmpWithDept?.code }})
+          </dd>
+          <hr>
+
+          <dt class="col-sm-2">Employee salary</dt>
+          <dd class="col-sm-10">
+            &nbsp; &nbsp; &nbsp; ({{ EmpWithDept?.salary }})
+          </dd>
+          <hr>
+
+          <dt class="col-sm-2">Employee joinDate</dt>
+          <dd class="col-sm-10">
+            &nbsp; &nbsp; &nbsp; ({{ EmpWithDept?.joinDate }})
+          </dd>
+          <hr>
+
+          <dt class="col-sm-2">Employee dateOfBirth</dt>
+          <dd class="col-sm-10">
+            &nbsp; &nbsp; &nbsp; ({{ EmpWithDept?.dateOfBirth }})
+          </dd>
+          <hr>
+
+          <dt class="col-sm-2">Employee Department</dt>
+          <dd class="col-sm-10">
+            &nbsp; &nbsp; &nbsp; ({{ EmpWithDept.department?.name }})
+          </dd>
+
+        </dl>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  -->

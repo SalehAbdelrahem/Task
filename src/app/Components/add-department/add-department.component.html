@@ -1,0 +1,18 @@
+<form class="row g-3 mx-1" [formGroup]="departmentFormGroup" (ngSubmit)="AddDepartmentFunc()">
+  <div class="col-md-6">
+      <label for="deptName" class="form-label"> Department Name
+      </label>
+      <input type="text" formControlName="name" class="form-control"
+          id="deptName">
+
+
+  </div>
+  <div class="my-2">
+  <input type="submit" class="btn btn-primary"  value="Add Department">
+
+  </div>
+</form>
+<div>
+{{departmentFormGroup.value| json}}
+
+</div>

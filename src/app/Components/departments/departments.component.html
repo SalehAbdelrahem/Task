@@ -1,0 +1,125 @@
+<div class="table-responsive">
+  <div class="text-center my-2">
+    <a class="btn btn-primary"
+    data-toggle="modal"
+            data-target="#exampleModal"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="AddDepartment()"
+    >Add Department</a>
+
+  </div>
+    <table class="table table-hover">
+      <thead >
+        <tr class="bg-dark text-white">
+          <th scope="col">Index</th>
+          <th scope="col">Department Name</th>
+          <th>Options</th>
+          <!-- <th scope="col">department Name</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="" *ngFor="let Dept of deptList ;let i = index">
+          <td>{{i+1}}</td>
+          <td>{{Dept.name}}</td>
+
+          <td>
+            <a class="btn btn-outline-warning"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="EditDepartment(Dept)">Edit</a>|
+            <a class="btn btn-outline-primary"
+            data-toggle="modal"
+            data-target="#ShowDetails"
+            data-bs-toggle="modal"
+            data-bs-target="#ShowDetails"
+            (click)="getDepartmentWithHisEmployees(Dept.id)"
+            >Details</a>|
+            <a class="btn btn-outline-danger" (click)="DeleteDepartment(Dept.id)">Delete</a>
+
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+   <!-- /////// -->
+
+
+
+   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3" [formGroup]="departmentForm">
+                    <div class="col-md-6">
+                        <label for="inputName" class="form-label"> Department Name
+                        </label>
+                        <input type="text" formControlName="name" class="form-control"
+                            id="inputName">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="UpdateDepartment()" *ngIf="showupdate">Update</button>
+                <button type="button" class="btn btn-primary" (click)="AddDepartment()" *ngIf="!showupdate">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+  <!-- /// -->
+<!--
+  Show Details of Department With his Employess
+ -->
+ <div class="modal fade" id="ShowDetails" tabindex="-1" aria-labelledby="ShowDetailsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="ShowDetailsLabel">Modal Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <dl class="row">
+              <dt class = "col-sm-2">
+                Department Name
+              </dt>
+              <dd class = "col-sm-10">
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                ({{deptWithEmployeesList.name}})
+              </dd>
+              <hr>
+              <dt class = "col-sm-2">
+                Employees
+              </dt>
+
+              <dd class = "col-sm-10">
+                <div>
+                  <span *ngFor="let item of deptWithEmployeesList.empolyees">&nbsp;
+                    &nbsp;
+                    &nbsp;({{item.name}})</span>
+                </div>
+              </dd>
+              </dl>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+              </div>
+      </div>
+  </div>
+</div>
+
+ <!--  -->
